@@ -8,6 +8,7 @@ class Recaptcha
 {
     private string $siteVerifyUrl = "https://www.google.com/recaptcha/api/siteverify";
     private string $secret;
+    private string $remoteIp;
 
     private array $errorCodesTranslate = [
         'missing-input-secret' => 'The secret parameter is missing.',
@@ -24,18 +25,29 @@ class Recaptcha
         $this->secret = $secret;
     }
 
-    public function verify(string $response)
+    public function setErrorCodesTranslate(array $errorCodesTranslate): Recaptcha
     {
-        if (!$response) {
+        $this->errorCodesTranslate = $errorCodesTranslate;
+
+        return $this;
+    }
+
+    public function setRemoteIp(string $remoteIp): Recaptcha
+    {
+        $this->remoteIp = $remoteIp;
+
+        return $this;
+    }
+
+    public function verify(string $gRecaptchaResponse)
+    {
+        if (!$gRecaptchaResponse) {
             throw new Exception($this->errorCodesTranslate['missing-input-response']);
         }
 
         $getResponse = $this->submitHttpGet(
             $this->siteVerifyUrl,
-            [
-                'secret' => $this->secret,
-                'response' => $response
-            ]
+            $this->defineData($gRecaptchaResponse)
         );
 
         $answer = json_decode($getResponse);
@@ -45,13 +57,6 @@ class Recaptcha
         }
 
         return true;
-    }
-
-    public function setErrorCodesTranslate(array $errorCodesTranslate): GoogleReCaptcha
-    {
-        $this->errorCodesTranslate = $errorCodesTranslate;
-
-        return $this;
     }
 
     /**
@@ -76,6 +81,20 @@ class Recaptcha
         }
 
         throw new Exception($this->errorCodesTranslate['general']);
+    }
+
+    private function defineData($gRecaptchaResponse): array
+    {
+        $data = [
+            'secret' => $this->secret,
+            'response' => $gRecaptchaResponse
+        ];
+
+        if ($this->remoteIp) {
+            $data['remoteip'] = $this->remoteIp;
+        }
+
+        return $data;
     }
 
 }
