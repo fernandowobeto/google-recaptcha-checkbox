@@ -1,7 +1,7 @@
 {
     "name": "fernando/google-recaptcha-checkbox",
     "description": "Service to validade Google recaptcha checkbox",
-    "type": "service, google, recaptcha checkbox",
+    "type": "service",
     "license": "MIT",
     "authors": [
         {
