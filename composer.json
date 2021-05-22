@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Wobeto\\GoogleRecaptchaCheckbox\\": "wobeto/google-recaptcha-checkbox"
+            "Wobeto\\GoogleRecaptchaCheckbox\\": "wobeto/google-recaptcha-checkbox/"
         }
     },
     "require": {
