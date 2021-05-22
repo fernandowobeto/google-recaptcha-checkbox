@@ -1,7 +1,9 @@
 {
     "name": "wobeto/google-recaptcha-checkbox",
     "description": "Service to validate Google recaptcha checkbox",
+    "keywords": ["google", "recaptcha", "checkbox"],
     "type": "library",
+    "version": "1.0",
     "license": "MIT",
     "authors": [
         {
