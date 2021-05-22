@@ -90,7 +90,7 @@ class Recaptcha
             'response' => $gRecaptchaResponse
         ];
 
-        if ($this->remoteIp) {
+        if (isset($this->remoteIp)) {
             $data['remoteip'] = $this->remoteIp;
         }
 
