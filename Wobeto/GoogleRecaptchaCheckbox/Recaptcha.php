@@ -2,6 +2,8 @@
 
 namespace Wobeto\GoogleRecaptchaCheckbox;
 
+use Exception;
+
 class Recaptcha
 {
     private string $siteVerifyUrl = "https://www.google.com/recaptcha/api/siteverify";
