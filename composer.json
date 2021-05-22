@@ -1,0 +1,20 @@
+{
+    "name": "fernando/google-recaptcha-checkbox",
+    "description": "Service to validade Google recaptcha checkbox",
+    "type": "service, google, recaptcha checkbox",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fernando Wobeto",
+            "email": "fernandowobeto@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Wobeto\\GoogleRecaptchaCheckbox\\": "Wobeto/GoogleRecaptchaCheckbox/"
+        }
+    },
+    "require": {
+        "php": ">=8.0"
+    }
+}
