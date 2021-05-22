@@ -1,5 +1,5 @@
 {
-    "name": "fernando/google-recaptcha-checkbox",
+    "name": "Wobeto/GoogleRecaptchaCheckbox",
     "description": "Service to validate Google recaptcha checkbox",
     "type": "library",
     "license": "MIT",
