@@ -1,6 +1,6 @@
 <?php
 
-namespace Wobeto\GoogleReCaptchaCheckbox;
+namespace Wobeto\GoogleRecaptchaCheckbox;
 
 class Recaptcha
 {
