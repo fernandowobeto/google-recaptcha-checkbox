@@ -1,6 +1,12 @@
 # Google Recaptcha
 
 
+To install via composer, run:
+
+```
+composer require wobeto/google-recaptcha-checkbox
+```
+
 Register a new site on https://www.google.com/recaptcha/admin
 
 Include the follow script to your site
@@ -8,7 +14,7 @@ Include the follow script to your site
 <script src="https://www.google.com/recaptcha/api.js?hl=pt-BR"></script>
 ```
 
-Include the google div recaptcha inside form tag and the site key in the `data-sitekey attribute
+Include the google div recaptcha inside form tag and the site key in the `data-sitekey` attribute
 ```html
 <div class="g-recaptcha" data-sitekey="site-key"></div>
 ```
