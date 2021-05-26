@@ -3,21 +3,25 @@
 namespace Wobeto\GoogleRecaptchaCheckbox;
 
 use Exception;
+use stdClass;
 
 class Recaptcha
 {
+
     private string $siteVerifyUrl = "https://www.google.com/recaptcha/api/siteverify";
     private string $secret;
     private string $remoteIp;
+    private string $expectedHostname;
 
     private array $errorCodesTranslate = [
-        'missing-input-secret' => 'The secret parameter is missing.',
-        'invalid-input-secret' => 'The secret parameter is invalid or malformed.',
+        'missing-input-secret'   => 'The secret parameter is missing.',
+        'invalid-input-secret'   => 'The secret parameter is invalid or malformed.',
         'missing-input-response' => 'The response parameter is missing.',
         'invalid-input-response' => 'The response parameter is invalid or malformed.',
-        'bad-request' => 'The request is invalid or malformed.',
-        'timeout-or-duplicate' => 'The response is no longer valid: either is too old or has been used previously.',
-        'generic' => 'Error ocurring'
+        'bad-request'            => 'The request is invalid or malformed.',
+        'timeout-or-duplicate'   => 'The response is no longer valid: either is too old or has been used previously.',
+        'hostname-mismatch'      => 'The hostname is incompatible',
+        'generic'                => 'Error ocurring'
     ];
 
     public function __construct(string $secret)
@@ -39,10 +43,17 @@ class Recaptcha
         return $this;
     }
 
+    public function setExpectedHostname(string $hostname): Recaptcha
+    {
+        $this->expectedHostname = $hostname;
+
+        return $this;
+    }
+
     public function verify(string $gRecaptchaResponse)
     {
         if (!$gRecaptchaResponse) {
-            throw new Exception($this->errorCodesTranslate['missing-input-response']);
+            $this->exceptionMissingInputResponse();
         }
 
         $getResponse = $this->submitHttpGet(
@@ -56,6 +67,13 @@ class Recaptcha
             $this->responseException($answer);
         }
 
+        if (
+            isset($this->expectedHostname) &&
+            strcasecmp($this->expectedHostname, $answer->hostname) !== 0
+        ) {
+            $this->exceptionExpectedHostname();
+        }
+
         return true;
     }
 
@@ -67,12 +85,12 @@ class Recaptcha
      *
      * @return array response
      */
-    private function submitHttpGet($path, $data): string
+    private function submitHttpGet(string $path, array $data): string
     {
         return file_get_contents($path . '?' . http_build_query($data));
     }
 
-    private function responseException($answer): never
+    private function responseException(stdClass $answer): never
     {
         $error = reset($answer->{"error-codes"});
 
@@ -83,10 +101,10 @@ class Recaptcha
         throw new Exception($this->errorCodesTranslate['general']);
     }
 
-    private function defineData($gRecaptchaResponse): array
+    private function defineData(string $gRecaptchaResponse): array
     {
         $data = [
-            'secret' => $this->secret,
+            'secret'   => $this->secret,
             'response' => $gRecaptchaResponse
         ];
 
@@ -95,6 +113,16 @@ class Recaptcha
         }
 
         return $data;
+    }
+
+    private function exceptionMissingInputResponse(): never
+    {
+        throw new Exception($this->errorCodesTranslate['missing-input-response']);
+    }
+
+    private function exceptionExpectedHostname(): never
+    {
+        throw new Exception($this->errorCodesTranslate['hostname-mismatch']);
     }
 
 }
